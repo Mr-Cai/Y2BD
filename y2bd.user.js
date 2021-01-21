@@ -23,7 +23,7 @@
 
     // =============================================================================
 
-    var win = typeof (unsafeWindow) !== 'undefined' ? unsafeWindow : window;
+    var win = typeof (unsafeWindow) !== "undefined" ? unsafeWindow : window;
     var doc = win.document;
     var loc = win.location;
 
@@ -35,27 +35,27 @@
     // Hack to get unsafe window in Chrome
     (function () {
 
-        var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') >= 0;
+        var isChrome = navigator.userAgent.toLowerCase().indexOf("chrome") >= 0;
 
         if (!isChrome)
             return;
 
         // Chrome 27 fixed this exploit, but luckily, its unsafeWin now works for us
         try {
-            var div = doc.createElement('div');
-            div.setAttribute('onclick', 'return window;');
+            var div = doc.createElement("div");
+            div.setAttribute("onclick", "return window;");
             unsafeWin = div.onclick();
         } catch (e) {
         }
 
     })();
 
-    var ua = navigator.userAgent || '';
+    var ua = navigator.userAgent || "";
     var isEdgeBrowser = ua.match(/ Edge\//);
 
     // =============================================================================
 
-    if (typeof GM == 'object' && GM.xmlHttpRequest && typeof GM_xmlhttpRequest == 'undefined') {
+    if (typeof GM == "object" && GM.xmlHttpRequest && typeof GM_xmlhttpRequest == "undefined") {
         GM_xmlhttpRequest = async function (opts) {
             await GM.xmlHttpRequest(opts);
         }
@@ -63,16 +63,16 @@
 
     // =============================================================================
 
-    var SCRIPT_NAME = 'YouTube Links';
+    var SCRIPT_NAME = "YouTube Links";
 
     var relInfo = {
         ver: 24100,
         ts: 2020113000,
-        desc: 'Fixed overly aggressive regexp'
+        desc: "Fixed overly aggressive regexp"
     };
 
-    var SCRIPT_UPDATE_LINK = loc.protocol + '//greasyfork.org/scripts/5565-youtube-links-updater/code/YouTube Links Updater.user.js';
-    var SCRIPT_LINK = loc.protocol + '//greasyfork.org/scripts/5566-youtube-links/code/YouTube Links.user.js';
+    var SCRIPT_UPDATE_LINK = loc.protocol + "//greasyfork.org/scripts/5565-youtube-links-updater/code/YouTube Links Updater.user.js";
+    var SCRIPT_LINK = loc.protocol + "//greasyfork.org/scripts/5566-youtube-links/code/YouTube Links.user.js";
 
     // =============================================================================
 
@@ -160,7 +160,7 @@
 
     dom.emitHtml = function (tag, attrs, body) {
         if (arguments.length == 2) {
-            if (typeof (attrs) == 'string') {
+            if (typeof (attrs) == "string") {
                 body = attrs;
                 attrs = {};
             }
@@ -173,10 +173,10 @@
                 list.push(k + "='" + attrs[k].replace(/'/g, "&#39;") + "'");
         }
 
-        var s = '<' + tag + ' ' + list.join(' ') + '>';
+        var s = "<" + tag + " " + list.join(" ") + ">";
 
         if (body != null)
-            s += body + '</' + tag + '>';
+            s += body + "</" + tag + ">";
 
         return s;
     };
@@ -185,22 +185,22 @@
         var list = [];
 
         for (var k in styles) {
-            list.push(k + ': ' + styles[k] + ';');
+            list.push(k + ": " + styles[k] + ";");
         }
 
-        return ' { ' + list.join(' ') + ' }';
+        return " { " + list.join(" ") + " }";
     };
 
     dom.ajax = function (opts) {
         function newXhr() {
             if (window.ActiveXObject) {
                 try {
-                    return new ActiveXObject('Msxml2.XMLHTTP');
+                    return new ActiveXObject("Msxml2.XMLHTTP");
                 } catch (e) {
                 }
 
                 try {
-                    return new ActiveXObject('Microsoft.XMLHTTP');
+                    return new ActiveXObject("Microsoft.XMLHTTP");
                 } catch (e) {
                     return null;
                 }
@@ -219,7 +219,7 @@
         var xhr = newXhr();
 
         opts = addProp({
-            type: 'GET',
+            type: "GET",
             async: true,
             success: nop,
             error: nop,
@@ -233,35 +233,35 @@
                 var status = +xhr.status;
 
                 if (status >= 200 && status < 300) {
-                    opts.success(xhr.responseText, 'success', xhr);
+                    opts.success(xhr.responseText, "success", xhr);
                 }
                 else {
-                    opts.error(xhr, 'error');
+                    opts.error(xhr, "error");
                 }
 
                 opts.complete(xhr);
             }
         };
 
-        xhr.send('');
+        xhr.send("");
     };
 
     dom.crossAjax = function (opts) {
         function wrapXhr(xhr) {
-            var headers = xhr.responseHeaders.replace('\r', '').split('\n');
+            var headers = xhr.responseHeaders.replace("\r", "").split("\n");
 
             var obj = {};
 
             forEach(headers, function (idx, elm) {
-                var nv = elm.split(':');
+                var nv = elm.split(":");
                 if (nv[1] != null)
-                    obj[nv[0].toLowerCase()] = nv[1].replace(/^\s+/, '').replace(/\s+$/, '');
+                    obj[nv[0].toLowerCase()] = nv[1].replace(/^\s+/, "").replace(/\s+$/, "");
             });
 
             var responseXML = null;
 
-            if (opts.dataType == 'xml')
-                responseXML = new DOMParser().parseFromString(xhr.responseText, 'text/xml');
+            if (opts.dataType == "xml")
+                responseXML = new DOMParser().parseFromString(xhr.responseText, "text/xml");
 
             return {
                 responseText: xhr.responseText,
@@ -283,17 +283,17 @@
 
         // Entry point
         opts = addProp({
-            type: 'GET',
+            type: "GET",
             async: true,
             success: nop,
             error: nop,
             complete: nop
         }, opts);
 
-        if (typeof GM_xmlhttpRequest === 'undefined') {
+        if (typeof GM_xmlhttpRequest === "undefined") {
             setTimeout(function () {
                 var xhr = {};
-                opts.error(xhr, 'error');
+                opts.error(xhr, "error");
                 opts.complete(xhr);
             }, 0);
             return;
@@ -316,16 +316,16 @@
                 xhr = wrapXhr(xhr);
 
                 if (xhr.status >= 200 && xhr.status < 300)
-                    opts.success(xhr.responseXML || xhr.responseText, 'success', xhr);
+                    opts.success(xhr.responseXML || xhr.responseText, "success", xhr);
                 else
-                    opts.error(xhr, 'error');
+                    opts.error(xhr, "error");
 
                 opts.complete(xhr);
             },
 
             onerror: function (xhr) {
                 xhr = wrapXhr(xhr);
-                opts.error(xhr, 'error');
+                opts.error(xhr, "error");
                 opts.complete(xhr);
             }
         });
@@ -341,26 +341,26 @@
         if (e.addEventListener) {
             var effFn = fn;
 
-            if (type == 'mouseenter') {
-                type = 'mouseover';
+            if (type == "mouseenter") {
+                type = "mouseover";
                 effFn = mouseEvent;
             }
-            else if (type == 'mouseleave') {
-                type = 'mouseout';
+            else if (type == "mouseleave") {
+                type = "mouseout";
                 effFn = mouseEvent;
             }
 
             e.addEventListener(type, effFn, /*capturePhase*/ false);
         }
         else
-            e.attachEvent('on' + type, function () { fn(win.event); });
+            e.attachEvent("on" + type, function () { fn(win.event); });
     };
 
     dom.insertCss = function (styles) {
-        var ss = dom.cE('style');
-        dom.attr(ss, 'type', 'text/css');
+        var ss = dom.cE("style");
+        dom.attr(ss, "type", "text/css");
 
-        var hh = dom.gT('head')[0];
+        var hh = dom.gT("head")[0];
         dom.append(hh, ss);
         dom.append(ss, dom.cT(styles));
     };
@@ -428,40 +428,40 @@
     }
 
     function encodeSafeFname(s) {
-        return encodeURIComponent(cnvSafeFname(s)).replace(/'/g, '%27');
+        return encodeURIComponent(cnvSafeFname(s)).replace(/'/g, "%27");
     }
 
     function getVideoName(s) {
         var list = [
-            { name: '3GP', codec: 'video\\/3gpp' },
-            { name: 'FLV', codec: 'video\\/x-flv' },
-            { name: 'M4V', codec: 'video\\/x-m4v' },
-            { name: 'MP3', codec: 'audio\\/mpeg' },
-            { name: 'MP4', codec: 'video\\/mp4' },
-            { name: 'M4A', codec: 'audio\\/mp4' },
-            { name: 'QT', codec: 'video\\/quicktime' },
-            { name: 'WEBM', codec: 'audio\\/webm' },
-            { name: 'WEBM', codec: 'video\\/webm' },
-            { name: 'WMV', codec: 'video\\/ms-wmv' }
+            { name: "3GP", codec: "video\\/3gpp" },
+            { name: "FLV", codec: "video\\/x-flv" },
+            { name: "M4V", codec: "video\\/x-m4v" },
+            { name: "MP3", codec: "audio\\/mpeg" },
+            { name: "MP4", codec: "video\\/mp4" },
+            { name: "M4A", codec: "audio\\/mp4" },
+            { name: "QT", codec: "video\\/quicktime" },
+            { name: "WEBM", codec: "audio\\/webm" },
+            { name: "WEBM", codec: "video\\/webm" },
+            { name: "WMV", codec: "video\\/ms-wmv" }
         ];
 
         var spCodecs = {
-            'av01': 'AV1',
-            'opus': 'OPUS',
-            'vorbis': 'VOR',
-            'vp9': 'VP9'
+            "av01": "AV1",
+            "opus": "OPUS",
+            "vorbis": "VOR",
+            "vp9": "VP9"
         };
 
-        if (s.match(/;\s*\+?codecs=\'([a-zA-Z0-9]+)/)) {
+        if (s.match(/;\s*\+?codecs=\"([a-zA-Z0-9]+)/)) {
             var str = RegExp.$1;
             if (spCodecs[str])
                 return spCodecs[str];
         }
 
-        var name = '?';
+        var name = "?";
 
         forEach(list, function (idx, elm) {
-            if (s.match('^' + elm.codec)) {
+            if (s.match("^" + elm.codec)) {
                 name = elm.name;
                 return false;
             }
@@ -476,7 +476,7 @@
 
     function cnvResName(res) {
         var resMap = {
-            'audio': 'Audio'
+            "audio": "Audio"
         };
 
         if (resMap[res])
@@ -495,27 +495,27 @@
         }
 
         var horzResAr = [
-            [16000, '16K'],
-            [14000, '14K'],
-            [12000, '12K'],
-            [10000, '10K'],
-            [8000, '8K'],
-            [6000, '6K'],
-            [5000, '5K'],
-            [4000, '4K'],
-            [3000, '3K'],
-            [2048, '2K']
+            [16000, "16K"],
+            [14000, "14K"],
+            [12000, "12K"],
+            [10000, "10K"],
+            [8000, "8K"],
+            [6000, "6K"],
+            [5000, "5K"],
+            [4000, "4K"],
+            [3000, "3K"],
+            [2048, "2K"]
         ];
 
         var vertResAr = [
-            [4320, '8K'],
-            [3160, '6K'],
-            [2880, '5K'],
-            [2160, '4K'],
-            [1728, '3K'],
-            [1536, '2K'],
-            [240, '240v'],
-            [144, '144v']
+            [4320, "8K"],
+            [3160, "6K"],
+            [2880, "5K"],
+            [2160, "4K"],
+            [1728, "3K"],
+            [1536, "2K"],
+            [240, "240v"],
+            [144, "144v"]
         ];
 
         var aspectRatio = getAspectRatio(wd, ht);
@@ -558,13 +558,13 @@
                 }
             });
 
-            name = String(ht) + (aspectRatio < FULL_AR_CUTOFF ? 'f' : 'p');
+            name = String(ht) + (aspectRatio < FULL_AR_CUTOFF ? "f" : "p");
         } while (false);
 
         if (aspectRatio >= ULTRA_WIDE_AR_CUTOFF)
-            name = 'u' + name;
+            name = "u" + name;
         else if (aspectRatio >= WIDE_AR_CUTOFF)
-            name = 'w' + name;
+            name = "w" + name;
 
         return name;
     }
@@ -583,12 +583,12 @@
         }
 
         var resList = [
-            { res: 3160, q: 'ultrahighres' },
-            { res: 1536, q: 'highres' },
-            { res: 1080, q: 'hd1080' },
-            { res: 720, q: 'hd720' },
-            { res: 480, q: 'large' },
-            { res: 360, q: 'medium' }
+            { res: 3160, q: "ultrahighres" },
+            { res: 1536, q: "highres" },
+            { res: 1080, q: "hd1080" },
+            { res: 720, q: "hd720" },
+            { res: 480, q: "large" },
+            { res: 360, q: "medium" }
         ];
 
         var q;
@@ -600,11 +600,11 @@
             }
         });
 
-        return q || 'small';
+        return q || "small";
     }
 
     function getQualityIdx(quality) {
-        var list = ['small', 'medium', 'large', 'hd720', 'hd1080', 'highres', 'ultrahighres'];
+        var list = ["small", "medium", "large", "hd720", "hd1080", "highres", "ultrahighres"];
 
         for (var i = 0; i < list.length; ++i) {
             if (list[i] == quality)
@@ -617,7 +617,7 @@
     // =============================================================================
 
     RegExp.escape = function (s) {
-        return String(s).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+        return String(s).replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     };
 
     var decryptSig = {
@@ -626,7 +626,7 @@
 
     (function () {
 
-        var SIG_STORE_ID = 'ujsYtLinksSig';
+        var SIG_STORE_ID = "ujsYtLinksSig";
 
         var CHK_SIG_INTERVAL = 3 * 86400;
 
@@ -643,9 +643,9 @@
         };
 
         decryptSig.extractScriptUrl = function (data) {
-            if (data.match(/ytplayer.config\s*=.*'assets'\s*:\s*\{.*'js'\s*:\s*('.+?')[,}]/))
+            if (data.match(/ytplayer.config\s*=.*"assets"\s*:\s*\{.*"js"\s*:\s*(".+?")[,}]/))
                 return JSON.parse(RegExp.$1);
-            else if (data.match(/ytplayer.web_player_context_config\s*=\s*\{.*'rootElementId':'movie_player','jsUrl':('.+?')[,}]/))
+            else if (data.match(/ytplayer.web_player_context_config\s*=\s*\{.*"rootElementId":"movie_player","jsUrl":(".+?")[,}]/))
                 return JSON.parse(RegExp.$1);
             else
                 return false;
@@ -666,17 +666,17 @@
 
         decryptSig.fetchScript = function (scriptName, url) {
             function success(data) {
-                data = data.replace(/\n|\r/g, '');
+                data = data.replace(/\n|\r/g, "");
 
                 var sigFn;
 
                 forEach([
                     /\.signature\s*=\s*(\w+)\(\w+\)/,
-                    /\.set\(\'signature\',([\w$]+)\(\w+\)\)/,
+                    /\.set\(\"signature\",([\w$]+)\(\w+\)\)/,
                     /\/yt\.akamaized\.net\/\)\s*\|\|\s*\w+\.set\s*\(.*?\)\s*;\s*\w+\s*&&\s*\w+\.set\s*\(\s*\w+\s*,\s*(?:encodeURIComponent\s*\()?([\w$]+)\s*\(/,
-                    /\b([a-zA-Z0-9$]{2})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*''\s*\)/,
-                    /([a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*''\s*\)\s*;\s*\w+\.\w+\s*\(/,
-                    /([a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*''\s*\)/,
+                    /\b([a-zA-Z0-9$]{2})\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)/,
+                    /([a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)\s*;\s*\w+\.\w+\s*\(/,
+                    /([a-zA-Z0-9$]+)\s*=\s*function\(\s*a\s*\)\s*{\s*a\s*=\s*a\.split\(\s*""\s*\)/,
                     /;\s*\w+\s*&&\s*\w+\.set\(\w+\s*,\s*(?:encodeURIComponent\s*\()?([\w$]+)\s*\(/,
                     /;\s*\w+\s*&&\s*\w+\.set\(\w+\s*,\s*\([^)]*\)\s*\(\s*([\w$]+)\s*\(/
                 ], function (idx, regex) {
@@ -689,12 +689,12 @@
                 if (sigFn == null)
                     return;
 
-                //console.log(scriptName + ' sig fn: ' + sigFn);
+                //console.log(scriptName + " sig fn: " + sigFn);
 
                 var fnArgBody = '\\s*\\((\\w+)\\)\\s*{(\\w+=\\w+\\.split\\(""\\);.+?;return \\w+\\.join\\(""\\))';
 
-                if (!data.match(new RegExp('function ' + RegExp.escape(sigFn) + fnArgBody)) &&
-                    !data.match(new RegExp('(?:var |[,;]\\s*|^\\s*)' + RegExp.escape(sigFn) + '\\s*=\\s*function' + fnArgBody)))
+                if (!data.match(new RegExp("function " + RegExp.escape(sigFn) + fnArgBody)) &&
+                    !data.match(new RegExp("(?:var |[,;]\\s*|^\\s*)" + RegExp.escape(sigFn) + "\\s*=\\s*function" + fnArgBody)))
                     return;
 
                 var fnParam = RegExp.$1;
@@ -703,39 +703,39 @@
                 var fnHlp = {};
                 var objHlp = {};
 
-                //console.log('param: ' + fnParam);
+                //console.log("param: " + fnParam);
                 //console.log(fnBody);
 
-                fnBody = fnBody.split(';');
+                fnBody = fnBody.split(";");
 
                 forEach(fnBody, function (idx, elm) {
                     // its own property
-                    if (elm.match(new RegExp('^' + fnParam + '=' + fnParam + '\\.')))
+                    if (elm.match(new RegExp("^" + fnParam + "=" + fnParam + "\\.")))
                         return;
 
                     // global fn
-                    if (elm.match(new RegExp('^' + fnParam + '=([a-zA-Z_$][a-zA-Z0-9_$]*)\\('))) {
+                    if (elm.match(new RegExp("^" + fnParam + "=([a-zA-Z_$][a-zA-Z0-9_$]*)\\("))) {
                         var name = RegExp.$1;
-                        //console.log('fnHlp: ' + name);
+                        //console.log("fnHlp: " + name);
 
                         if (fnHlp[name])
                             return;
 
-                        if (data.match(new RegExp('(function ' + RegExp.escape(RegExp.$1) + '.+?;return \\w+})')))
+                        if (data.match(new RegExp("(function " + RegExp.escape(RegExp.$1) + ".+?;return \\w+})")))
                             fnHlp[name] = RegExp.$1;
 
                         return;
                     }
 
                     // object fn
-                    if (elm.match(new RegExp('^([a-zA-Z_$][a-zA-Z0-9_$]*)\.([a-zA-Z_$][a-zA-Z0-9_$]*)\\('))) {
+                    if (elm.match(new RegExp("^([a-zA-Z_$][a-zA-Z0-9_$]*)\.([a-zA-Z_$][a-zA-Z0-9_$]*)\\("))) {
                         var name = RegExp.$1;
-                        //console.log('objHlp: ' + name);
+                        //console.log("objHlp: " + name);
 
                         if (objHlp[name])
                             return;
 
-                        if (data.match(new RegExp('(var ' + RegExp.escape(RegExp.$1) + '={.+?};)')))
+                        if (data.match(new RegExp("(var " + RegExp.escape(RegExp.$1) + "={.+?};)")))
                             objHlp[name] = RegExp.$1;
 
                         return;
@@ -745,7 +745,7 @@
                 //console.log(fnHlp);
                 //console.log(objHlp);
 
-                var fnHlpStr = '';
+                var fnHlpStr = "";
 
                 for (var k in fnHlp)
                     fnHlpStr += fnHlp[k];
@@ -753,7 +753,7 @@
                 for (var k in objHlp)
                     fnHlpStr += objHlp[k];
 
-                var fullFn = 'function(' + fnParam + '){' + fnHlpStr + fnBody.join(';') + '}';
+                var fullFn = "function(" + fnParam + "){" + fnHlpStr + fnBody.join(";") + "}";
                 //console.log(fullFn);
 
                 decryptSig.store[scriptName] = { ver: relInfo.ver, ts: timeNowInSec(), fn: fullFn };
@@ -786,7 +786,7 @@
         //console.log(decryptSig.store[scriptName].fn);
 
         try {
-            sig = eval('(' + decryptSig.store[scriptName].fn + ') (\'' + sig + '\')');
+            sig = eval("(" + decryptSig.store[scriptName].fn + ") (\"" + sig + "\")");
         } catch (e) {
         }
 
@@ -810,12 +810,12 @@
     function parseStreamMap(map, value) {
         var fmtUrlList = [];
 
-        forEach(value.split(','), function (idx, elm) {
-            var elms = elm.replace(/\\\//g, '/').replace(/\\u0026/g, '&').split('&');
+        forEach(value.split(","), function (idx, elm) {
+            var elms = elm.replace(/\\\//g, "/").replace(/\\u0026/g, "&").split("&");
             var obj = {};
 
             forEach(elms, function (idx, elm) {
-                var kv = elm.split('=');
+                var kv = elm.split("=");
                 obj[kv[0]] = decodeURIComponent(kv[1]);
             });
 
@@ -843,12 +843,12 @@
     function parseAdaptiveStreamMap(map, value) {
         var fmtUrlList = [];
 
-        forEach(value.split(','), function (idx, elm) {
-            var elms = elm.replace(/\\\//g, '/').replace(/\\u0026/g, '&').split('&');
+        forEach(value.split(","), function (idx, elm) {
+            var elms = elm.replace(/\\\//g, "/").replace(/\\u0026/g, "&").split("&");
             var obj = {};
 
             forEach(elms, function (idx, elm) {
-                var kv = elm.split('=');
+                var kv = elm.split("=");
                 obj[kv[0]] = decodeURIComponent(kv[1]);
             });
 
@@ -864,13 +864,13 @@
                 obj.fps = +obj.fps;
 
             //logMsg(obj);
-            //logMsg(map.videoId + ': ' + obj.index + ' ' + obj.init + ' ' + obj.itag + ' ' + obj.size + ' ' + obj.bitrate + ' ' + obj.type);
+            //logMsg(map.videoId + ": " + obj.index + " " + obj.init + " " + obj.itag + " " + obj.size + " " + obj.bitrate + " " + obj.type);
 
-            if (obj.type.match(/^video\/mp4/) && !obj.type.match(/;\s*\+?codecs='av01\./))
-                obj.effType = 'video/x-m4v';
+            if (obj.type.match(/^video\/mp4/) && !obj.type.match(/;\s*\+?codecs="av01\./))
+                obj.effType = "video/x-m4v";
 
             if (obj.type.match(/^audio\//))
-                obj.size = 'audio';
+                obj.size = "audio";
 
             obj.quality = mapResToQuality(obj.size);
 
@@ -890,17 +890,17 @@
     }
 
     function parseFmtList(map, value) {
-        var list = value.split(',');
+        var list = value.split(",");
 
         forEach(list, function (idx, elm) {
-            var elms = elm.replace(/\\\//g, '/').split('/');
+            var elms = elm.replace(/\\\//g, "/").split("/");
 
             var fmtId = elms[0];
             var res = elms[1];
             elms.splice(/*idx*/ 0, /*rm*/ 2);
 
             if (map.adaptiveAR && res.match(/^(\d+)x(\d+)/))
-                res = Math.round(+RegExp.$2 * map.adaptiveAR) + 'x' + RegExp.$2;
+                res = Math.round(+RegExp.$2 * map.adaptiveAR) + "x" + RegExp.$2;
 
             map.fmtMap[fmtId] = { res: cnvResName(res), vars: elms };
         });
@@ -910,7 +910,7 @@
 
     function parseNewFormatsMap(map, str, unescSlashFlag) {
         if (unescSlashFlag)
-            str = str.replace(/\\\//g, '/').replace(/\\'/g, '\'').replace(/\\\\/g, '\\');
+            str = str.replace(/\\\//g, "/").replace(/\\"/g, "\"").replace(/\\\\/g, "\\");
 
         var list = JSON.parse(str);
 
@@ -924,23 +924,23 @@
             };
 
             // Distinguish between AV1, M4V and MP4
-            if (elm.audioQuality == null && obj.type.match(/^video\/mp4/) && !obj.type.match(/;\s*\+?codecs='av01\./))
-                obj.effType = 'video/x-m4v';
+            if (elm.audioQuality == null && obj.type.match(/^video\/mp4/) && !obj.type.match(/;\s*\+?codecs="av01\./))
+                obj.effType = "video/x-m4v";
 
             if (elm.contentLength != null)
                 obj.clen = +elm.contentLength;
 
             if (obj.type.match(/^audio\//))
-                obj.size = 'audio';
+                obj.size = "audio";
             else
-                obj.size = elm.width + 'x' + elm.height;
+                obj.size = elm.width + "x" + elm.height;
 
             obj.quality = mapResToQuality(obj.size);
 
             var cipher = elm.cipher || elm.signatureCipher;
             if (cipher) {
-                forEach(cipher.split('&'), function (idx, elm) {
-                    var kv = elm.split('=');
+                forEach(cipher.split("&"), function (idx, elm) {
+                    var kv = elm.split("=");
                     obj[kv[0]] = decodeURIComponent(kv[1]);
                 });
 
@@ -962,60 +962,60 @@
         function success(data) {
             var map = {};
 
-            if (data.match(/<div\s+id='verify-details'>/)) {
-                logMsg('Skipping ' + url);
+            if (data.match(/<div\s+id="verify-details">/)) {
+                logMsg("Skipping " + url);
                 return;
             }
 
-            if (data.match(/<h1\s+id='unavailable-message'>/)) {
-                logMsg('Not avail ' + url);
+            if (data.match(/<h1\s+id="unavailable-message">/)) {
+                logMsg("Not avail " + url);
                 return;
             }
 
-            if (data.match(/'t':\s?'(.+?)'/))
+            if (data.match(/"t":\s?"(.+?)"/))
                 map.t = RegExp.$1;
 
-            if (data.match(/'(?:video_id|videoId)':\s?'(.+?)'/))
+            if (data.match(/"(?:video_id|videoId)":\s?"(.+?)"/))
                 map.videoId = RegExp.$1;
-            else if (data.match(/\\'videoId\\':\s?\\'(.+?)\\'/))
+            else if (data.match(/\\"videoId\\":\s?\\"(.+?)\\"/))
                 map.videoId = RegExp.$1;
-            else if (data.match(/'VIDEO_ID':\s?'(.+?)',/))
+            else if (data.match(/'VIDEO_ID':\s?"(.+?)",/))
                 map.videoId = RegExp.$1;
 
             if (!map.videoId) {
-                logMsg('No videoId; skipping ' + url);
+                logMsg("No videoId; skipping " + url);
                 return;
             }
 
             map.scriptUrl = decryptSig.extractScriptUrl(data);
             if (map.scriptUrl) {
-                //logMsg(map.videoId + ' script: ' + map.scriptUrl);
+                //logMsg(map.videoId + " script: " + map.scriptUrl);
                 map.scriptName = decryptSig.getScriptName(map.scriptUrl);
                 decryptSig.condFetchScript(map.scriptUrl);
             }
 
-            if (data.match(/<meta\s+itemprop='name'\s*content='(.+?)'\s*>\s*\n/))
+            if (data.match(/<meta\s+itemprop="name"\s*content="(.+?)"\s*>\s*\n/))
                 map.title = unescHtmlEntities(RegExp.$1);
 
-            if (map.title == null && data.match(/<meta\s+name='title'\s*content='(.+?)'\s*>/))
+            if (map.title == null && data.match(/<meta\s+name="title"\s*content="(.+?)"\s*>/))
                 map.title = unescHtmlEntities(RegExp.$1);
 
             var titleStream;
 
-            if (map.title == null && data.match(/'videoDetails':{(.*?)}[,}]/))
+            if (map.title == null && data.match(/"videoDetails":{(.*?)}[,}]/))
                 titleStream = RegExp.$1;
             else
                 titleStream = data;
 
             // Edge replaces & with \u0026
-            if (map.title == null && titleStream.match(/[,{]'title':('[^']+')[,}]/))
+            if (map.title == null && titleStream.match(/[,{]"title":("[^"]+")[,}]/))
                 map.title = unescHtmlEntities(JSON.parse(RegExp.$1));
 
-            // Edge fails the previous regex if \' exists
-            if (map.title == null && titleStream.match(/[,{]'title':('.*?')[,}]'/))
+            // Edge fails the previous regex if \" exists
+            if (map.title == null && titleStream.match(/[,{]"title":(".*?")[,}]"/))
                 map.title = unescHtmlEntities(JSON.parse(RegExp.$1));
 
-            if (data.match(/[,{]\\'isLiveContent\\':\s*true[,}]/))
+            if (data.match(/[,{]\\"isLiveContent\\":\s*true[,}]/))
                 map.isLive = true;
 
             map.fmtUrlList = [];
@@ -1023,45 +1023,45 @@
             var oldFmtFlag;
             var newFmtFlag;
 
-            if (data.match(/[,{]'url_encoded_fmt_stream_map':\s?'([^']+)'[,}]/)) {
+            if (data.match(/[,{]"url_encoded_fmt_stream_map":\s?"([^"]+)"[,}]/)) {
                 parseStreamMap(map, RegExp.$1);
                 oldFmtFlag = true;
             }
 
             map.fmtMap = {};
 
-            if (data.match(/[,{]'adaptive_fmts':\s?'(.+?)'[,}]/)) {
+            if (data.match(/[,{]"adaptive_fmts":\s?"(.+?)"[,}]/)) {
                 parseAdaptiveStreamMap(map, RegExp.$1);
                 oldFmtFlag = true;
             }
 
-            if (data.match(/[,{]'fmt_list':\s?'([^']+)'[,}]/))
+            if (data.match(/[,{]"fmt_list":\s?"([^"]+)"[,}]/))
                 parseFmtList(map, RegExp.$1);
 
             // Is part of 'player_response' and is escaped
-            if (!oldFmtFlag && data.match(/\\'formats\\':(\[{[^\]]*}\])[},]/)) {
+            if (!oldFmtFlag && data.match(/\\"formats\\":(\[{[^\]]*}\])[},]/)) {
                 parseNewFormatsMap(map, RegExp.$1, /*unescSlash*/ true);
                 newFmtFlag = true;
             }
 
-            if (!oldFmtFlag && data.match(/\\'adaptiveFormats\\':(\[{[^\]]*}\])[},]/)) {
+            if (!oldFmtFlag && data.match(/\\"adaptiveFormats\\":(\[{[^\]]*}\])[},]/)) {
                 parseNewFormatsMap(map, RegExp.$1, /*unescSlash*/ true);
                 newFmtFlag = true;
             }
 
             // Is part of 'ytInitialPlayerResponse' and is not escaped
             if (!oldFmtFlag && !newFmtFlag) {
-                if (data.match(/[,{]'formats':(\[{[^\]]*}\])[},]/))
+                if (data.match(/[,{]"formats":(\[{[^\]]*}\])[},]/))
                     parseNewFormatsMap(map, RegExp.$1);
 
-                if (data.match(/[,{]'adaptiveFormats':(\[{[^\]]*}\])[},]/))
+                if (data.match(/[,{]"adaptiveFormats":(\[{[^\]]*}\])[},]/))
                     parseNewFormatsMap(map, RegExp.$1);
             }
 
-            if (data.match(/[,{]'dashmpd':\s?'(.+?)'[,}]/))
-                map.dashmpd = decodeURIComponent(RegExp.$1.replace(/\\\//g, '/'));
-            else if (data.match(/[,{]\\'dashManifestUrl\\':\s?\\'(.+?)\\'[,}]/))
-                map.dashmpd = decodeURIComponent(RegExp.$1.replace(/\\\//g, '/'));
+            if (data.match(/[,{]"dashmpd":\s?"(.+?)"[,}]/))
+                map.dashmpd = decodeURIComponent(RegExp.$1.replace(/\\\//g, "/"));
+            else if (data.match(/[,{]\\"dashManifestUrl\\":\s?\\"(.+?)\\"[,}]/))
+                map.dashmpd = decodeURIComponent(RegExp.$1.replace(/\\\//g, "/"));
 
             if (userConfig.filteredFormats.length > 0) {
                 for (var i = 0; i < map.fmtUrlList.length; ++i) {
@@ -1078,9 +1078,9 @@
             var HIGH_AUDIO_BPS = 96 * 1024;
 
             forEach(map.fmtUrlList, function (idx, elm) {
-                hasHighRes |= elm.quality == 'hd720' || elm.quality == 'hd1080';
+                hasHighRes |= elm.quality == "hd720" || elm.quality == "hd1080";
 
-                if (elm.quality == 'audio')
+                if (elm.quality == "audio")
                     hasHighAudio |= elm.bitrate >= HIGH_AUDIO_BPS;
             });
 
@@ -1089,7 +1089,7 @@
                     if (inArray(getVideoNameByType(map.fmtUrlList[i]), userConfig.keepFormats) >= 0)
                         continue;
 
-                    if (map.fmtUrlList[i].quality == 'small') {
+                    if (map.fmtUrlList[i].quality == "small") {
                         map.fmtUrlList.splice(i, /*len*/ 1);
                         --i;
                         continue;
@@ -1102,7 +1102,7 @@
                     if (inArray(getVideoNameByType(map.fmtUrlList[i]), userConfig.keepFormats) >= 0)
                         continue;
 
-                    if (map.fmtUrlList[i].quality == 'audio' && map.fmtUrlList[i].bitrate < HIGH_AUDIO_BPS) {
+                    if (map.fmtUrlList[i].quality == "audio" && map.fmtUrlList[i].bitrate < HIGH_AUDIO_BPS) {
                         map.fmtUrlList.splice(i, /*len*/ 1);
                         --i;
                         continue;
@@ -1124,8 +1124,8 @@
         if (diff != 0)
             return diff;
 
-        var aRes = (a.size || '').match(/^(\d+)x(\d+)/);
-        var bRes = (b.size || '').match(/^(\d+)x(\d+)/);
+        var aRes = (a.size || "").match(/^(\d+)x(\d+)/);
+        var bRes = (b.size || "").match(/^(\d+)x(\d+)/);
 
         if (aRes == null) aRes = [0, 0, 0];
         if (bRes == null) bRes = [0, 0, 0];
@@ -1142,243 +1142,243 @@
 
     // -----------------------------------------------------------------------------
 
-    var CSS_PREFIX = 'ujs-';
+    var CSS_PREFIX = "ujs-";
 
-    var HDR_LINKS_HTML_ID = CSS_PREFIX + 'hdr-links-div';
-    var LINKS_HTML_ID = CSS_PREFIX + 'links-cls';
-    var LINKS_TP_HTML_ID = CSS_PREFIX + 'links-tp-div';
-    var UPDATE_HTML_ID = CSS_PREFIX + 'update-div';
-    var VID_FMT_BTN_ID = CSS_PREFIX + 'vid-fmt-btn';
+    var HDR_LINKS_HTML_ID = CSS_PREFIX + "hdr-links-div";
+    var LINKS_HTML_ID = CSS_PREFIX + "links-cls";
+    var LINKS_TP_HTML_ID = CSS_PREFIX + "links-tp-div";
+    var UPDATE_HTML_ID = CSS_PREFIX + "update-div";
+    var VID_FMT_BTN_ID = CSS_PREFIX + "vid-fmt-btn";
 
     /* The !important attr is to override the page's specificity. */
     var CSS_STYLES =
-        '#' + VID_FMT_BTN_ID + dom.emitCssStyles({
-            'cursor': 'pointer',
-            'margin': '0 0.333em',
-            'padding': '0.5em'
-        }) + '\n' +
-        '#' + UPDATE_HTML_ID + dom.emitCssStyles({
-            'background-color': '#f00',
-            'border-radius': '2px',
-            'color': '#fff',
-            'padding': '5px',
-            'text-align': 'center',
-            'text-decoration': 'none',
-            'position': 'fixed',
-            'top': '0.5em',
-            'right': '0.5em',
-            'z-index': '1000'
-        }) + '\n' +
-        '#' + UPDATE_HTML_ID + ':hover' + dom.emitCssStyles({
-            'background-color': '#0d0'
-        }) + '\n' +
-        '#page-container #' + HDR_LINKS_HTML_ID + dom.emitCssStyles({
-            'font-size': '90%'
-        }) + '\n' +
-        '#page-manager #' + HDR_LINKS_HTML_ID + dom.emitCssStyles({ // 2017 Material Design
-            'font-size': '1.2em'
-        }) + '\n' +
-        '#' + HDR_LINKS_HTML_ID + dom.emitCssStyles({
-            'background-color': '#f8f8f8',
-            'border': '#eee 1px solid',
-            //'border-radius': '3px',
-            'color': '#333',
-            'margin': '5px',
-            'padding': '5px'
-        }) + '\n' +
-        'html[dark] #' + HDR_LINKS_HTML_ID + dom.emitCssStyles({
-            'background-color': '#222',
-            'border': 'none'
-        }) + '\n' +
-        '#' + HDR_LINKS_HTML_ID + ' .' + CSS_PREFIX + 'group' + dom.emitCssStyles({
-            'background-color': '#fff',
-            'color': '#000 !important',
-            'border': '#ccc 1px solid',
-            'border-radius': '3px',
-            'display': 'inline-block',
-            'margin': '3px',
-        }) + '\n' +
-        'html[dark] #' + HDR_LINKS_HTML_ID + ' .' + CSS_PREFIX + 'group' + dom.emitCssStyles({
-            'background-color': '#444',
-            'color': '#fff !important',
-            'border': 'none'
-        }) + '\n' +
-        '#' + HDR_LINKS_HTML_ID + ' a' + dom.emitCssStyles({
-            'display': 'table-cell',
-            'padding': '3px',
-            'text-decoration': 'none'
-        }) + '\n' +
-        '#' + HDR_LINKS_HTML_ID + ' a:hover' + dom.emitCssStyles({
-            'background-color': '#d1e1fa'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + dom.emitCssStyles({
-            'border-radius': '3px',
-            'cursor': 'default',
-            'line-height': '1em',
-            'position': 'absolute',
-            'left': '0',
-            'top': '0',
-            'z-index': '1000'
-        }) + '\n' +
-        '#page-manager div.' + LINKS_HTML_ID + dom.emitCssStyles({ // 2017 Material Design
-            'font-size': '1.2em',
-            'padding': '2px 4px'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + '.layout2017' + dom.emitCssStyles({ // 2017 Material Design
-            'font-size': '1.2em'
-        }) + '\n' +
-        '#' + LINKS_TP_HTML_ID + dom.emitCssStyles({
-            'background-color': '#f0f0f0',
-            'border': '#aaa 1px solid',
-            'padding': '3px 0',
-            'text-decoration': 'none',
-            'white-space': 'nowrap',
-            'z-index': '1100'
-        }) + '\n' +
-        'html[dark] #' + LINKS_TP_HTML_ID + dom.emitCssStyles({
-            'background-color': '#222'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + ' a' + dom.emitCssStyles({
-            'display': 'inline-block',
-            'margin': '1px',
-            'text-decoration': 'none'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + ' .' + CSS_PREFIX + 'video' + dom.emitCssStyles({
-            'display': 'inline-block',
-            'text-align': 'center',
-            'width': '3.5em'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + ' .' + CSS_PREFIX + 'quality' + dom.emitCssStyles({
-            'display': 'inline-block',
-            'text-align': 'center',
-            'width': '5.5em'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'video' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'padding': '1px 3px',
-            'text-align': 'center'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'quality' + dom.emitCssStyles({
-            'color': '#000 !important',
-            'display': 'table-cell',
-            'min-width': '1.5em',
-            'padding': '1px 3px',
-            'text-align': 'center',
-            'vertical-align': 'middle'
-        }) + '\n' +
-        'html[dark] .' + CSS_PREFIX + 'quality' + dom.emitCssStyles({
-            'color': '#fff !important'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'filesize' + dom.emitCssStyles({
-            'font-size': '90%',
-            'margin-top': '2px',
-            'padding': '1px 3px',
-            'text-align': 'center'
-        }) + '\n' +
-        'html[dark] .' + CSS_PREFIX + 'filesize' + dom.emitCssStyles({
-            'color': '#999'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'filesize-err' + dom.emitCssStyles({
-            'color': '#f00',
-            'font-size': '90%',
-            'margin-top': '2px',
-            'padding': '1px 3px',
-            'text-align': 'center'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'not-avail' + dom.emitCssStyles({
-            'background-color': '#700',
-            'color': '#fff',
-            'padding': '3px',
-        }) + '\n' +
-        '.' + CSS_PREFIX + '3gp' + dom.emitCssStyles({
-            'background-color': '#bbb'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'av1' + dom.emitCssStyles({
-            'background-color': '#f5f'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'flv' + dom.emitCssStyles({
-            'background-color': '#0dd'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'm4a' + dom.emitCssStyles({
-            'background-color': '#07e'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'm4v' + dom.emitCssStyles({
-            'background-color': '#07e'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'mp3' + dom.emitCssStyles({
-            'background-color': '#7ba'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'mp4' + dom.emitCssStyles({
-            'background-color': '#777'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'opus' + dom.emitCssStyles({
-            'background-color': '#e0e'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'qt' + dom.emitCssStyles({
-            'background-color': '#f08'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'vor' + dom.emitCssStyles({
-            'background-color': '#e0e'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'vp9' + dom.emitCssStyles({
-            'background-color': '#e0e'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'webm' + dom.emitCssStyles({
-            'background-color': '#d4d'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'wmv' + dom.emitCssStyles({
-            'background-color': '#c75'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'small' + dom.emitCssStyles({
-            'color': '#888 !important',
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'medium' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'background-color': '#0d0'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'large' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'background-color': '#00d',
-            'background-image': 'linear-gradient(to right, #00d, #00a)'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'hd720' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'background-color': '#f90',
-            'background-image': 'linear-gradient(to right, #f90, #d70)'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'hd1080' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'background-color': '#f00',
-            'background-image': 'linear-gradient(to right, #f00, #c00)'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'highres' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'background-color': '#c0f',
-            'background-image': 'linear-gradient(to right, #c0f, #90f)'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'ultrahighres' + dom.emitCssStyles({
-            'color': '#fff !important',
-            'background-color': '#ffe42b',
-            'background-image': 'linear-gradient(to right, #ffe42b, #dfb200)'
-        }) + '\n' +
-        '.' + CSS_PREFIX + 'pos-rel' + dom.emitCssStyles({
-            'position': 'relative'
-        }) + '\n' +
-        '#' + HDR_LINKS_HTML_ID + ' a.flash:hover' + dom.emitCssStyles({
-            'background-color': '#ffa',
-            'transition': 'background-color 0.25s linear'
-        }) + '\n' +
-        '#' + HDR_LINKS_HTML_ID + ' a.flash-out:hover' + dom.emitCssStyles({
-            'transition': 'background-color 0.25s linear'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + ' a.flash div' + dom.emitCssStyles({
-            'background-color': '#ffa',
-            'transition': 'background-color 0.25s linear'
-        }) + '\n' +
-        'div.' + LINKS_HTML_ID + ' a.flash-out div' + dom.emitCssStyles({
-            'transition': 'background-color 0.25s linear'
-        }) + '\n' +
-        '';
+        "#" + VID_FMT_BTN_ID + dom.emitCssStyles({
+            "cursor": "pointer",
+            "margin": "0 0.333em",
+            "padding": "0.5em"
+        }) + "\n" +
+        "#" + UPDATE_HTML_ID + dom.emitCssStyles({
+            "background-color": "#f00",
+            "border-radius": "2px",
+            "color": "#fff",
+            "padding": "5px",
+            "text-align": "center",
+            "text-decoration": "none",
+            "position": "fixed",
+            "top": "0.5em",
+            "right": "0.5em",
+            "z-index": "1000"
+        }) + "\n" +
+        "#" + UPDATE_HTML_ID + ":hover" + dom.emitCssStyles({
+            "background-color": "#0d0"
+        }) + "\n" +
+        "#page-container #" + HDR_LINKS_HTML_ID + dom.emitCssStyles({
+            "font-size": "90%"
+        }) + "\n" +
+        "#page-manager #" + HDR_LINKS_HTML_ID + dom.emitCssStyles({ // 2017 Material Design
+            "font-size": "1.2em"
+        }) + "\n" +
+        "#" + HDR_LINKS_HTML_ID + dom.emitCssStyles({
+            "background-color": "#f8f8f8",
+            "border": "#eee 1px solid",
+            //"border-radius": "3px",
+            "color": "#333",
+            "margin": "5px",
+            "padding": "5px"
+        }) + "\n" +
+        "html[dark] #" + HDR_LINKS_HTML_ID + dom.emitCssStyles({
+            "background-color": "#222",
+            "border": "none"
+        }) + "\n" +
+        "#" + HDR_LINKS_HTML_ID + " ." + CSS_PREFIX + "group" + dom.emitCssStyles({
+            "background-color": "#fff",
+            "color": "#000 !important",
+            "border": "#ccc 1px solid",
+            "border-radius": "3px",
+            "display": "inline-block",
+            "margin": "3px",
+        }) + "\n" +
+        "html[dark] #" + HDR_LINKS_HTML_ID + " ." + CSS_PREFIX + "group" + dom.emitCssStyles({
+            "background-color": "#444",
+            "color": "#fff !important",
+            "border": "none"
+        }) + "\n" +
+        "#" + HDR_LINKS_HTML_ID + " a" + dom.emitCssStyles({
+            "display": "table-cell",
+            "padding": "3px",
+            "text-decoration": "none"
+        }) + "\n" +
+        "#" + HDR_LINKS_HTML_ID + " a:hover" + dom.emitCssStyles({
+            "background-color": "#d1e1fa"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + dom.emitCssStyles({
+            "border-radius": "3px",
+            "cursor": "default",
+            "line-height": "1em",
+            "position": "absolute",
+            "left": "0",
+            "top": "0",
+            "z-index": "1000"
+        }) + "\n" +
+        "#page-manager div." + LINKS_HTML_ID + dom.emitCssStyles({ // 2017 Material Design
+            "font-size": "1.2em",
+            "padding": "2px 4px"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + ".layout2017" + dom.emitCssStyles({ // 2017 Material Design
+            "font-size": "1.2em"
+        }) + "\n" +
+        "#" + LINKS_TP_HTML_ID + dom.emitCssStyles({
+            "background-color": "#f0f0f0",
+            "border": "#aaa 1px solid",
+            "padding": "3px 0",
+            "text-decoration": "none",
+            "white-space": "nowrap",
+            "z-index": "1100"
+        }) + "\n" +
+        "html[dark] #" + LINKS_TP_HTML_ID + dom.emitCssStyles({
+            "background-color": "#222"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + " a" + dom.emitCssStyles({
+            "display": "inline-block",
+            "margin": "1px",
+            "text-decoration": "none"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + " ." + CSS_PREFIX + "video" + dom.emitCssStyles({
+            "display": "inline-block",
+            "text-align": "center",
+            "width": "3.5em"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + " ." + CSS_PREFIX + "quality" + dom.emitCssStyles({
+            "display": "inline-block",
+            "text-align": "center",
+            "width": "5.5em"
+        }) + "\n" +
+        "." + CSS_PREFIX + "video" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "padding": "1px 3px",
+            "text-align": "center"
+        }) + "\n" +
+        "." + CSS_PREFIX + "quality" + dom.emitCssStyles({
+            "color": "#000 !important",
+            "display": "table-cell",
+            "min-width": "1.5em",
+            "padding": "1px 3px",
+            "text-align": "center",
+            "vertical-align": "middle"
+        }) + "\n" +
+        "html[dark] ." + CSS_PREFIX + "quality" + dom.emitCssStyles({
+            "color": "#fff !important"
+        }) + "\n" +
+        "." + CSS_PREFIX + "filesize" + dom.emitCssStyles({
+            "font-size": "90%",
+            "margin-top": "2px",
+            "padding": "1px 3px",
+            "text-align": "center"
+        }) + "\n" +
+        "html[dark] ." + CSS_PREFIX + "filesize" + dom.emitCssStyles({
+            "color": "#999"
+        }) + "\n" +
+        "." + CSS_PREFIX + "filesize-err" + dom.emitCssStyles({
+            "color": "#f00",
+            "font-size": "90%",
+            "margin-top": "2px",
+            "padding": "1px 3px",
+            "text-align": "center"
+        }) + "\n" +
+        "." + CSS_PREFIX + "not-avail" + dom.emitCssStyles({
+            "background-color": "#700",
+            "color": "#fff",
+            "padding": "3px",
+        }) + "\n" +
+        "." + CSS_PREFIX + "3gp" + dom.emitCssStyles({
+            "background-color": "#bbb"
+        }) + "\n" +
+        "." + CSS_PREFIX + "av1" + dom.emitCssStyles({
+            "background-color": "#f5f"
+        }) + "\n" +
+        "." + CSS_PREFIX + "flv" + dom.emitCssStyles({
+            "background-color": "#0dd"
+        }) + "\n" +
+        "." + CSS_PREFIX + "m4a" + dom.emitCssStyles({
+            "background-color": "#07e"
+        }) + "\n" +
+        "." + CSS_PREFIX + "m4v" + dom.emitCssStyles({
+            "background-color": "#07e"
+        }) + "\n" +
+        "." + CSS_PREFIX + "mp3" + dom.emitCssStyles({
+            "background-color": "#7ba"
+        }) + "\n" +
+        "." + CSS_PREFIX + "mp4" + dom.emitCssStyles({
+            "background-color": "#777"
+        }) + "\n" +
+        "." + CSS_PREFIX + "opus" + dom.emitCssStyles({
+            "background-color": "#e0e"
+        }) + "\n" +
+        "." + CSS_PREFIX + "qt" + dom.emitCssStyles({
+            "background-color": "#f08"
+        }) + "\n" +
+        "." + CSS_PREFIX + "vor" + dom.emitCssStyles({
+            "background-color": "#e0e"
+        }) + "\n" +
+        "." + CSS_PREFIX + "vp9" + dom.emitCssStyles({
+            "background-color": "#e0e"
+        }) + "\n" +
+        "." + CSS_PREFIX + "webm" + dom.emitCssStyles({
+            "background-color": "#d4d"
+        }) + "\n" +
+        "." + CSS_PREFIX + "wmv" + dom.emitCssStyles({
+            "background-color": "#c75"
+        }) + "\n" +
+        "." + CSS_PREFIX + "small" + dom.emitCssStyles({
+            "color": "#888 !important",
+        }) + "\n" +
+        "." + CSS_PREFIX + "medium" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "background-color": "#0d0"
+        }) + "\n" +
+        "." + CSS_PREFIX + "large" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "background-color": "#00d",
+            "background-image": "linear-gradient(to right, #00d, #00a)"
+        }) + "\n" +
+        "." + CSS_PREFIX + "hd720" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "background-color": "#f90",
+            "background-image": "linear-gradient(to right, #f90, #d70)"
+        }) + "\n" +
+        "." + CSS_PREFIX + "hd1080" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "background-color": "#f00",
+            "background-image": "linear-gradient(to right, #f00, #c00)"
+        }) + "\n" +
+        "." + CSS_PREFIX + "highres" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "background-color": "#c0f",
+            "background-image": "linear-gradient(to right, #c0f, #90f)"
+        }) + "\n" +
+        "." + CSS_PREFIX + "ultrahighres" + dom.emitCssStyles({
+            "color": "#fff !important",
+            "background-color": "#ffe42b",
+            "background-image": "linear-gradient(to right, #ffe42b, #dfb200)"
+        }) + "\n" +
+        "." + CSS_PREFIX + "pos-rel" + dom.emitCssStyles({
+            "position": "relative"
+        }) + "\n" +
+        "#" + HDR_LINKS_HTML_ID + " a.flash:hover" + dom.emitCssStyles({
+            "background-color": "#ffa",
+            "transition": "background-color 0.25s linear"
+        }) + "\n" +
+        "#" + HDR_LINKS_HTML_ID + " a.flash-out:hover" + dom.emitCssStyles({
+            "transition": "background-color 0.25s linear"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + " a.flash div" + dom.emitCssStyles({
+            "background-color": "#ffa",
+            "transition": "background-color 0.25s linear"
+        }) + "\n" +
+        "div." + LINKS_HTML_ID + " a.flash-out div" + dom.emitCssStyles({
+            "transition": "background-color 0.25s linear"
+        }) + "\n" +
+        "";
 
     function condInsertHdr(divId) {
         if (dom.gE(HDR_LINKS_HTML_ID))
@@ -1388,7 +1388,7 @@
         if (!insertPtNode)
             return false;
 
-        var divNode = dom.cE('div');
+        var divNode = dom.cE("div");
         divNode.id = HDR_LINKS_HTML_ID;
 
         insertPtNode.parentNode.insertBefore(divNode, insertPtNode);
@@ -1406,22 +1406,22 @@
         if (dom.gE(LINKS_TP_HTML_ID))
             return true;
 
-        var toolTipNode = dom.cE('div');
+        var toolTipNode = dom.cE("div");
         toolTipNode.id = LINKS_TP_HTML_ID;
 
         var cls = [LINKS_HTML_ID];
 
-        if (dom.gE('page-manager'))
-            cls.push('layout2017');
+        if (dom.gE("page-manager"))
+            cls.push("layout2017");
 
-        dom.attr(toolTipNode, 'class', cls.join(' '));
-        dom.attr(toolTipNode, 'style', 'display: none;');
+        dom.attr(toolTipNode, "class", cls.join(" "));
+        dom.attr(toolTipNode, "style", "display: none;");
 
         dom.append(doc.body, toolTipNode);
 
-        dom.addEvent(toolTipNode, 'mouseleave', function (evt) {
-            //logMsg('mouse leave');
-            dom.attr(toolTipNode, 'style', 'display: none;');
+        dom.addEvent(toolTipNode, "mouseleave", function (evt) {
+            //logMsg("mouse leave");
+            dom.attr(toolTipNode, "style", "display: none;");
             stopChkMouseInPopup();
         });
     }
@@ -1430,15 +1430,15 @@
         if (dom.gE(UPDATE_HTML_ID))
             return;
 
-        var divNode = dom.cE('a');
+        var divNode = dom.cE("a");
         divNode.id = UPDATE_HTML_ID;
         dom.append(doc.body, divNode);
     }
 
     // -----------------------------------------------------------------------------
 
-    var STORE_ID = 'ujsYtLinks';
-    var JSONP_ID = 'ujsYtLinks';
+    var STORE_ID = "ujsYtLinks";
+    var JSONP_ID = "ujsYtLinks";
 
     // User settings can be saved in localStorage. Refer to documentation for details.
     var userConfig = {
@@ -1465,7 +1465,7 @@
 
     var HFR_CUTOFF = 45;
 
-    var fmtSizeSuffix = ['kB', 'MB', 'GB'];
+    var fmtSizeSuffix = ["kB", "MB", "GB"];
     var fmtSizeUnit = 1000;
 
     function Links() {
@@ -1474,7 +1474,7 @@
     Links.prototype.init = function () {
         for (var k in userConfig) {
             try {
-                var v = localStorage.getItem(STORE_ID + '.cfg.' + k);
+                var v = localStorage.getItem(STORE_ID + ".cfg." + k);
                 if (v != null)
                     userConfig[k] = JSON.parse(v);
             } catch (e) {
@@ -1487,7 +1487,7 @@
         var selElm = map.fmtUrlList[0];
 
         forEach(map.fmtUrlList, function (idx, elm) {
-            if (getVideoName(elm.type).toLowerCase() != 'webm') {
+            if (getVideoName(elm.type).toLowerCase() != "webm") {
                 selElm = elm;
                 return false;
             }
@@ -1502,34 +1502,34 @@
 
             var dashList = [];
 
-            var adaptationSetDom = xml.getElementsByTagName('AdaptationSet');
+            var adaptationSetDom = xml.getElementsByTagName("AdaptationSet");
             //logMsg(adaptationSetDom);
 
             forEach(adaptationSetDom, function (i, adaptationElm) {
-                var mimeType = adaptationElm.getAttribute('mimeType');
-                //logMsg(i + ' ' + mimeType);
+                var mimeType = adaptationElm.getAttribute("mimeType");
+                //logMsg(i + " " + mimeType);
 
-                var representationDom = adaptationElm.getElementsByTagName('Representation');
+                var representationDom = adaptationElm.getElementsByTagName("Representation");
                 forEach(representationDom, function (j, repElm) {
                     var dashElm = { mimeType: mimeType };
 
-                    forEach(['codecs'], function (idx, elm) {
+                    forEach(["codecs"], function (idx, elm) {
                         var v = repElm.getAttribute(elm);
                         if (v != null)
                             dashElm[elm] = v;
                     });
 
-                    forEach(['audioSamplingRate', 'bandwidth', 'frameRate', 'height', 'id', 'width'], function (idx, elm) {
+                    forEach(["audioSamplingRate", "bandwidth", "frameRate", "height", "id", "width"], function (idx, elm) {
                         var v = repElm.getAttribute(elm);
                         if (v != null)
                             dashElm[elm] = +v;
                     });
 
-                    var baseUrlDom = repElm.getElementsByTagName('BaseURL');
-                    dashElm.len = +baseUrlDom[0].getAttribute('yt:contentLength');
+                    var baseUrlDom = repElm.getElementsByTagName("BaseURL");
+                    dashElm.len = +baseUrlDom[0].getAttribute("yt:contentLength");
                     dashElm.url = baseUrlDom[0].textContent;
 
-                    var segList = repElm.getElementsByTagName('SegmentList');
+                    var segList = repElm.getElementsByTagName("SegmentList");
                     if (segList.length > 0)
                         dashElm.numSegments = segList[0].childNodes.length;
 
@@ -1543,10 +1543,10 @@
             var maxBitRateMap = {};
 
             forEach(dashList, function (idx, dashElm) {
-                if (dashElm.mimeType != 'video/mp4' && dashElm.mimeType != 'video/webm')
+                if (dashElm.mimeType != "video/mp4" && dashElm.mimeType != "video/webm")
                     return;
 
-                var id = [dashElm.mimeType, dashElm.width, dashElm.height, dashElm.frameRate].join('|');
+                var id = [dashElm.mimeType, dashElm.width, dashElm.height, dashElm.frameRate].join("|");
 
                 if (maxBitRateMap[id] == null || maxBitRateMap[id] < dashElm.bandwidth)
                     maxBitRateMap[id] = dashElm.bandwidth;
@@ -1571,41 +1571,41 @@
 
                 //logMsg(dashElm);
 
-                if ((dashElm.mimeType == 'video/mp4' || dashElm.mimeType == 'video/webm') && (dashElm.width >= 1000 || dashElm.height >= 1000)) {
-                    var id = [dashElm.mimeType, dashElm.width, dashElm.height, dashElm.frameRate].join('|');
+                if ((dashElm.mimeType == "video/mp4" || dashElm.mimeType == "video/webm") && (dashElm.width >= 1000 || dashElm.height >= 1000)) {
+                    var id = [dashElm.mimeType, dashElm.width, dashElm.height, dashElm.frameRate].join("|");
 
                     if (maxBitRateMap[id] == null || dashElm.bandwidth < maxBitRateMap[id])
                         return;
 
-                    var size = dashElm.width + 'x' + dashElm.height;
+                    var size = dashElm.width + "x" + dashElm.height;
 
                     if (map.fmtMap[dashElm.id] == null)
                         map.fmtMap[dashElm.id] = { res: cnvResName(size) };
 
                     map.fmtUrlList.push({
                         bitrate: dashElm.bandwidth,
-                        effType: dashElm.mimeType == 'video/mp4' ? 'video/x-m4v' : null,
+                        effType: dashElm.mimeType == "video/mp4" ? "video/x-m4v" : null,
                         filesize: dashElm.len,
                         fps: dashElm.frameRate,
                         itag: dashElm.id,
                         quality: mapResToQuality(size),
                         size: size,
-                        type: dashElm.mimeType + ';+codecs=\'' + dashElm.codecs + '\'',
+                        type: dashElm.mimeType + ";+codecs=\"" + dashElm.codecs + "\"",
                         url: dashElm.url,
                         numSegments: dashElm.numSegments
                     });
                 }
-                else if (dashElm.mimeType == 'audio/mp4' && dashElm.audioSamplingRate >= 44100) {
+                else if (dashElm.mimeType == "audio/mp4" && dashElm.audioSamplingRate >= 44100) {
                     if (map.fmtMap[dashElm.id] == null) {
-                        map.fmtMap[dashElm.id] = { res: 'Audio' };
+                        map.fmtMap[dashElm.id] = { res: "Audio" };
                     }
 
                     map.fmtUrlList.push({
                         bitrate: dashElm.bandwidth,
                         filesize: dashElm.len,
                         itag: dashElm.id,
-                        quality: 'audio',
-                        type: dashElm.mimeType + ';+codecs=\'' + dashElm.codecs + '\'',
+                        quality: "audio",
+                        type: dashElm.mimeType + ";+codecs=\"" + dashElm.codecs + "\"",
                         url: dashElm.url
                     });
                 }
@@ -1627,12 +1627,12 @@
 
         if (map.dashmpd.match(/\/s\/([a-zA-Z0-9.]+)\//)) {
             var sig = deobfuscateVideoSig(map.scriptName, RegExp.$1);
-            map.dashmpd = map.dashmpd.replace(/\/s\/[a-zA-Z0-9.]+\//, '/sig/' + sig + '/');
+            map.dashmpd = map.dashmpd.replace(/\/s\/[a-zA-Z0-9.]+\//, "/sig/" + sig + "/");
         }
 
         dom.crossAjax({
             url: map.dashmpd,
-            dataType: 'xml',
+            dataType: "xml",
 
             success: function (data, status, xhr) {
                 parse(data);
@@ -1654,25 +1654,25 @@
         if (!userConfig.showVideoFormats)
             return;
 
-        if (!forceFlag && userConfig.showVideoFormats == 'btn') {
+        if (!forceFlag && userConfig.showVideoFormats == "btn") {
             condRemoveHdr();
 
             if (dom.gE(VID_FMT_BTN_ID))
                 return;
 
             // 'container' is for Material Design
-            var mastH = dom.gE('yt-masthead-signin') || dom.gE('yt-masthead-user') || dom.gE('container');
+            var mastH = dom.gE("yt-masthead-signin") || dom.gE("yt-masthead-user") || dom.gE("container");
             if (!mastH)
                 return;
 
-            var btn = dom.cE('button');
-            dom.attr(btn, 'id', VID_FMT_BTN_ID);
-            dom.attr(btn, 'class', 'yt-uix-button yt-uix-button-default');
-            btn.innerHTML = 'VidFmts';
+            var btn = dom.cE("button");
+            dom.attr(btn, "id", VID_FMT_BTN_ID);
+            dom.attr(btn, "class", "yt-uix-button yt-uix-button-default");
+            btn.innerHTML = "VidFmts";
 
             dom.prepend(mastH, btn);
 
-            dom.addEvent(btn, 'click', function (evt) {
+            dom.addEvent(btn, "click", function (evt) {
                 me.checkFmts(/*force*/ true);
             });
 
@@ -1684,7 +1684,7 @@
 
         var videoId = RegExp.$1;
 
-        var url = loc.protocol + '//' + loc.host + '/watch?v=' + videoId;
+        var url = loc.protocol + "//" + loc.host + "/watch?v=" + videoId;
 
         var curVideoUrl = loc.toString();
 
@@ -1700,10 +1700,10 @@
     };
 
     Links.prototype.genUrl = function (map, elm) {
-        var url = elm.url + '&title=' + encodeSafeFname(map.title);
+        var url = elm.url + "&title=" + encodeSafeFname(map.title);
 
         if (elm.sig != null)
-            url += '&sig=' + elm.sig;
+            url += "&sig=" + elm.sig;
 
         return url;
     };
@@ -1730,15 +1730,15 @@
         }
 
         function fmtBitrate(size) {
-            return fmtSize(size, ['kbps', 'Mbps', 'Gbps'], 1000);
+            return fmtSize(size, ["kbps", "Mbps", "Gbps"], 1000);
         }
 
         function getFileExt(videoName, elm) {
-            if (videoName == 'VP9')
-                return 'video.webm';
+            if (videoName == "VP9")
+                return "video.webm";
 
-            if (videoName == 'VOR')
-                return 'audio.webm';
+            if (videoName == "VOR")
+                return "audio.webm";
 
             return videoName.toLowerCase();
         }
@@ -1765,7 +1765,7 @@
         for (var res in resMap) {
             var qFields = [];
 
-            qFields.push(dom.emitHtml('div', { 'class': CSS_PREFIX + 'quality ' + CSS_PREFIX + resMap[res].quality }, res));
+            qFields.push(dom.emitHtml("div", { "class": CSS_PREFIX + "quality " + CSS_PREFIX + resMap[res].quality }, res));
 
             forEach(resMap[res], function (idx, elm) {
                 var fields = [];
@@ -1775,9 +1775,9 @@
                 var addMsg = [elm.itag, elm.type, elm.size || elm.quality];
 
                 if (elm.fps != null)
-                    addMsg.push(elm.fps + 'fps');
+                    addMsg.push(elm.fps + "fps");
 
-                var varMsg = '';
+                var varMsg = "";
 
                 if (elm.bitrate != null)
                     varMsg = fmtBitrate(elm.bitrate);
@@ -1787,19 +1787,19 @@
                 addMsg.push(varMsg);
 
                 if (elm.s != null)
-                    addMsg.push('sig-' + elm.s.length);
+                    addMsg.push("sig-" + elm.s.length);
 
                 if (elm.filesize != null && elm.filesize >= 0)
                     addMsg.push(fmtSize(elm.filesize));
 
-                var vidSuffix = '';
+                var vidSuffix = "";
 
                 if (inArray(elm.itag, [82, 83, 84, 100, 101, 102]) >= 0)
-                    vidSuffix = ' (3D)';
+                    vidSuffix = " (3D)";
                 else if (elm.fps != null && elm.fps >= HFR_CUTOFF)
-                    vidSuffix = ' (HFR)';
+                    vidSuffix = " (HFR)";
 
-                fields.push(dom.emitHtml('div', { 'class': CSS_PREFIX + 'video ' + CSS_PREFIX + videoName.toLowerCase() }, videoName + vidSuffix));
+                fields.push(dom.emitHtml("div", { "class": CSS_PREFIX + "video " + CSS_PREFIX + videoName.toLowerCase() }, videoName + vidSuffix));
 
                 if (elm.filesize != null) {
                     var filesize = elm.filesize;
@@ -1808,30 +1808,30 @@
                         filesize = -1;
 
                     if (filesize >= 0) {
-                        fields.push(dom.emitHtml('div', { 'class': CSS_PREFIX + 'filesize' }, fmtSize(filesize)));
+                        fields.push(dom.emitHtml("div", { "class": CSS_PREFIX + "filesize" }, fmtSize(filesize)));
                     }
                     else {
                         var msg;
 
                         if (elm.isDrm)
-                            msg = 'DRM';
+                            msg = "DRM";
                         else if (elm.s != null)
-                            msg = 'sig-' + elm.s.length;
+                            msg = "sig-" + elm.s.length;
                         else if (elm.numSegments > 1)
-                            msg = 'Frag';
+                            msg = "Frag";
                         else if (map.isLive)
-                            msg = 'Live';
+                            msg = "Live";
                         else
-                            msg = 'Err';
+                            msg = "Err";
 
-                        fields.push(dom.emitHtml('div', { 'class': CSS_PREFIX + 'filesize-err' }, msg));
+                        fields.push(dom.emitHtml("div", { "class": CSS_PREFIX + "filesize-err" }, msg));
                     }
                 }
 
                 var url;
 
                 if (elm.isDrm)
-                    url = elm.conn + '?' + elm.stream;
+                    url = elm.conn + "?" + elm.stream;
                 else
                     url = me.genUrl(map, elm);
 
@@ -1839,31 +1839,31 @@
                 var ext = getFileExt(videoName, elm);
 
                 if (ext)
-                    fname += '.' + ext;
+                    fname += "." + ext;
 
-                var ahref = dom.emitHtml('a', {
+                var ahref = dom.emitHtml("a", {
                     download: fname,
                     ext: ext,
                     href: url,
                     res: res,
-                    title: addMsg.join(' | ')
-                }, fields.join(''));
+                    title: addMsg.join(" | ")
+                }, fields.join(""));
 
                 qFields.push(ahref);
             });
 
-            s.push(dom.emitHtml('div', { 'class': CSS_PREFIX + 'group' }, qFields.join('')));
+            s.push(dom.emitHtml("div", { "class": CSS_PREFIX + "group" }, qFields.join("")));
         }
 
-        return s.join('');
+        return s.join("");
     };
 
     Links.prototype.createLinks = function (insertNode, map) {
         function copyToClipboard(text) {
-            var node = dom.cE('textarea');
+            var node = dom.cE("textarea");
 
             // Needed to prevent scrolling to top of page
-            node.style.position = 'fixed';
+            node.style.position = "fixed";
 
             node.value = text;
 
@@ -1875,7 +1875,7 @@
             var ret = false;
 
             try {
-                if (document.execCommand('copy'))
+                if (document.execCommand("copy"))
                     ret = true;
             } catch (e) {
             }
@@ -1886,29 +1886,29 @@
         }
 
         function addCopyHandler(node) {
-            forEach(dom.gT(node, 'a'), function (idx, elm) {
-                dom.addEvent(elm, 'click', function (evt) {
+            forEach(dom.gT(node, "a"), function (idx, elm) {
+                dom.addEvent(elm, "click", function (evt) {
                     var me = this;
 
-                    var ext = dom.attr(me, 'ext');
-                    var res = dom.attr(me, 'res') || '';
+                    var ext = dom.attr(me, "ext");
+                    var res = dom.attr(me, "res") || "";
 
                     // This is the only video that can be downloaded directly
-                    if (ext == 'mp4' && res.match(/^[a-z]?720[a-z]$/))
+                    if (ext == "mp4" && res.match(/^[a-z]?720[a-z]$/))
                         return;
 
                     evt.preventDefault();
 
-                    var fname = dom.attr(me, 'download');
+                    var fname = dom.attr(me, "download");
                     //logMsg(fname);
 
                     copyToClipboard(fname);
 
-                    var orgCls = dom.attr(me, 'class') || '';
+                    var orgCls = dom.attr(me, "class") || "";
 
-                    dom.attr(me, 'class', orgCls + ' flash');
-                    setTimeout(function () { dom.attr(me, 'class', orgCls + ' flash-out'); }, 250);
-                    setTimeout(function () { dom.attr(me, 'class', orgCls); }, 500);
+                    dom.attr(me, "class", orgCls + " flash");
+                    setTimeout(function () { dom.attr(me, "class", orgCls + " flash-out"); }, 250);
+                    setTimeout(function () { dom.attr(me, "class", orgCls); }, 500);
                 });
             });
         }
@@ -1922,13 +1922,13 @@
         /* Emit to tmp node first because in GM 4, <a> event does not fire on nodes
          already in the DOM. */
 
-        var stgNode = dom.cE('div');
+        var stgNode = dom.cE("div");
         dom.html(stgNode, me.emitLinks(map));
 
         if (userConfig.copyToClipboard)
             addCopyHandler(stgNode);
 
-        dom.html(insertNode, '');
+        dom.html(insertNode, "");
 
         while (stgNode.childNodes.length > 0)
             insertNode.appendChild(stgNode.firstChild);
@@ -1970,7 +1970,7 @@
         var curVideoUrl = loc.toString();
 
         forEach(map.fmtUrlList, function (idx, elm) {
-            //logMsg(elm.itag + ' ' + elm.url);
+            //logMsg(elm.itag + " " + elm.url);
 
             // We just fail outright for protected/obfuscated videos
             if (elm.isDrm || elm.s != null) {
@@ -1991,22 +1991,22 @@
                     return;
 
                 dom.crossAjax({
-                    type: 'HEAD',
+                    type: "HEAD",
                     url: me.genUrl(map, elm),
 
                     success: function (data, status, xhr) {
-                        var filesize = xhr.getResponseHeader('Content-Length');
+                        var filesize = xhr.getResponseHeader("Content-Length");
                         if (filesize == null)
                             return;
 
-                        //logMsg(map.title + ' ' + elm.itag + ': ' + filesize);
+                        //logMsg(map.title + " " + elm.itag + ": " + filesize);
                         elm.filesize = +filesize;
 
                         updateLinks();
                     },
 
                     error: function (xhr, status) {
-                        //logMsg(map.fmtMap[elm.itag].res + ' ' + getVideoName(elm.type) + ': ' + xhr.status);
+                        //logMsg(map.fmtMap[elm.itag].res + " " + getVideoName(elm.type) + ": " + xhr.status);
 
                         if (xhr.status != 403 && xhr.status != 404)
                             return;
@@ -2017,7 +2017,7 @@
                     },
 
                     complete: function (xhr) {
-                        //logMsg(map.title + ': ' + xhr.getAllResponseHeaders());
+                        //logMsg(map.title + ": " + xhr.getAllResponseHeaders());
                     }
                 });
             }, INI_SHOW_FILESIZE_DELAY_MS + idx * SUB_SHOW_FILESIZE_DELAY_MS);
@@ -2033,7 +2033,7 @@
             var elm = me.getPreferredFmt(map);
             var fmtMap = map.fmtMap[elm.itag];
 
-            dom.attr(node, 'class', LINKS_HTML_ID + ' ' + CSS_PREFIX + 'quality ' + CSS_PREFIX + elm.quality);
+            dom.attr(node, "class", LINKS_HTML_ID + " " + CSS_PREFIX + "quality " + CSS_PREFIX + elm.quality);
 
             var label = fmtMap.res;
 
@@ -2042,19 +2042,19 @@
 
             var tagEvent;
 
-            if (userConfig.tagLinks == 'label')
-                tagEvent = 'click';
+            if (userConfig.tagLinks == "label")
+                tagEvent = "click";
             else
-                tagEvent = 'mouseenter';
+                tagEvent = "mouseenter";
 
             dom.addEvent(node, tagEvent, function (evt) {
-                //logMsg('mouse enter ' + map.videoId);
+                //logMsg("mouse enter " + map.videoId);
                 var pos = dom.offset(node);
-                //logMsg('mouse enter: x ' + pos.left + ', y ' + pos.top);
+                //logMsg("mouse enter: x " + pos.left + ", y " + pos.top);
 
                 var toolTipNode = dom.gE(LINKS_TP_HTML_ID);
 
-                dom.attr(toolTipNode, 'style', 'position: absolute; left: ' + pos.left + 'px; top: ' + pos.top + 'px');
+                dom.attr(toolTipNode, "style", "position: absolute; left: " + pos.left + "px; top: " + pos.top + "px");
 
                 me.createLinks(toolTipNode, map);
 
@@ -2066,27 +2066,27 @@
 
         function addTag(hNode, map) {
             //logMsg(dom.html(hNode));
-            //logMsg('hNode ' + dom.attr(hNode, 'class'));
-            //var img = dom.gT(hNode, 'img') [0];
-            //logMsg(dom.attr(img, 'src'));
-            //logMsg(dom.attr(img, 'class'));
+            //logMsg("hNode " + dom.attr(hNode, "class"));
+            //var img = dom.gT(hNode, "img") [0];
+            //logMsg(dom.attr(img, "src"));
+            //logMsg(dom.attr(img, "class"));
 
-            dom.attr(hNode, CSS_PREFIX + 'processed', ADDED_INFO);
+            dom.attr(hNode, CSS_PREFIX + "processed", ADDED_INFO);
 
-            var node = dom.cE('div');
+            var node = dom.cE("div");
 
             if (map.fmtUrlList && map.fmtUrlList.length > 0) {
                 tagHtml = prepareTagHtml(node, map);
             }
             else {
-                dom.attr(node, 'class', LINKS_HTML_ID + ' ' + CSS_PREFIX + 'not-avail');
-                tagHtml = 'NA';
+                dom.attr(node, "class", LINKS_HTML_ID + " " + CSS_PREFIX + "not-avail");
+                tagHtml = "NA";
             }
 
             var parentNode;
             var insNode;
 
-            var cls = dom.attr(hNode, 'class') || '';
+            var cls = dom.attr(hNode, "class") || "";
             var isVideoWallStill = cls.match(/videowall-still/);
             if (isVideoWallStill) {
                 parentNode = hNode;
@@ -2098,7 +2098,7 @@
             }
 
             // Remove existing tags
-            var divNodes = parentNode.getElementsByTagName('div');
+            var divNodes = parentNode.getElementsByTagName("div");
             for (var i = 0; i < divNodes.length; ++i) {
                 var hNode = divNodes[i];
 
@@ -2108,10 +2108,10 @@
                     ++i;
             }
 
-            var parentCssPositionStyle = window.getComputedStyle(parentNode, null).getPropertyValue('position');
+            var parentCssPositionStyle = window.getComputedStyle(parentNode, null).getPropertyValue("position");
 
-            if (parentCssPositionStyle != 'absolute' && parentCssPositionStyle != 'relative')
-                dom.attr(parentNode, 'class', dom.attr(parentNode, 'class') + ' ' + CSS_PREFIX + 'pos-rel');
+            if (parentCssPositionStyle != "absolute" && parentCssPositionStyle != "relative")
+                dom.attr(parentNode, "class", dom.attr(parentNode, "class") + " " + CSS_PREFIX + "pos-rel");
 
             parentNode.insertBefore(node, insNode);
 
@@ -2127,9 +2127,9 @@
             var url;
 
             if (videoId.match(/.+==$/))
-                url = loc.protocol + '//' + loc.host + '/cthru?key=' + videoId;
+                url = loc.protocol + "//" + loc.host + "/cthru?key=" + videoId;
             else
-                url = loc.protocol + '//' + loc.host + '/watch?v=' + videoId;
+                url = loc.protocol + "//" + loc.host + "/watch?v=" + videoId;
 
             getVideoInfo(url, function (map) {
                 videoInfoCache[videoId] = map;
@@ -2142,41 +2142,41 @@
 
         var list = [];
 
-        forEach(dom.gT('a'), function (idx, hNode) {
-            var href = dom.attr(hNode, 'href') || '';
+        forEach(dom.gT("a"), function (idx, hNode) {
+            var href = dom.attr(hNode, "href") || "";
 
             if (!href.match(/watch\?v=([a-zA-Z0-9_-]+)/) &&
                 !href.match(/watch_videos.+?&video_ids=([a-zA-Z0-9_-]+)/))
                 return;
 
             var videoId = RegExp.$1;
-            var oldHref = dom.attr(hNode, CSS_PREFIX + 'href');
+            var oldHref = dom.attr(hNode, CSS_PREFIX + "href");
 
-            if (href == oldHref && dom.attr(hNode, CSS_PREFIX + 'processed'))
+            if (href == oldHref && dom.attr(hNode, CSS_PREFIX + "processed"))
                 return;
 
             if (!dom.inViewport(hNode))
                 return;
 
-            dom.attr(hNode, CSS_PREFIX + 'processed', SCANNED);
-            dom.attr(hNode, CSS_PREFIX + 'href', href);
+            dom.attr(hNode, CSS_PREFIX + "processed", SCANNED);
+            dom.attr(hNode, CSS_PREFIX + "href", href);
 
-            var cls = dom.attr(hNode, 'class') || '';
+            var cls = dom.attr(hNode, "class") || "";
             if (!cls.match(/videowall-still/)) {
-                if (cls == 'yt-button' || cls.match(/yt-uix-button/))
+                if (cls == "yt-button" || cls.match(/yt-uix-button/))
                     return;
 
                 // Material Design
                 if (cls.match(/ytd-playlist-(panel-)?video-renderer/))
                     return;
 
-                if (dom.attr(hNode.parentNode, 'class') == 'video-time')
+                if (dom.attr(hNode.parentNode, "class") == "video-time")
                     return;
 
                 if (dom.html(hNode).match(/video-logo/i))
                     return;
 
-                var img = dom.gT(hNode, 'img');
+                var img = dom.gT(hNode, "img");
                 if (img == null || img.length == 0)
                     return;
 
@@ -2184,11 +2184,11 @@
 
                 // /yts/img/pixel-*.gif is the placeholder image
                 // can be null as well
-                var imgSrc = dom.attr(img, 'src') || '';
-                if (imgSrc.indexOf('ytimg.com') < 0 && !imgSrc.match(/^\/yts\/img\/.*\.gif$/) && imgSrc != '')
+                var imgSrc = dom.attr(img, "src") || "";
+                if (imgSrc.indexOf("ytimg.com") < 0 && !imgSrc.match(/^\/yts\/img\/.*\.gif$/) && imgSrc != "")
                     return;
 
-                var tnSrc = dom.attr(img, 'thumb') || '';
+                var tnSrc = dom.attr(img, "thumb") || "";
 
                 if (imgSrc.match(/.+?\/([a-zA-Z0-9_-]*)\/(hq)?default\.jpg$/))
                     videoId = RegExp.$1;
@@ -2196,12 +2196,12 @@
                     videoId = RegExp.$1;
             }
 
-            //logMsg(idx + ' ' + href);
-            //logMsg('videoId: ' + videoId);
+            //logMsg(idx + " " + href);
+            //logMsg("videoId: " + videoId);
 
             list.push({ videoId: videoId, hNode: hNode });
 
-            dom.attr(hNode, CSS_PREFIX + 'processed', REQ_INFO);
+            dom.attr(hNode, CSS_PREFIX + "processed", REQ_INFO);
         });
 
         forLoop({ num: list.length, inc: TAG_LINK_NUM_PER_BATCH, batchIdx: 0 }, function (idx) {
@@ -2210,7 +2210,7 @@
 
             setTimeout(function () {
                 forEach(batchList, function (idx, elm) {
-                    //logMsg(batchIdx + ' ' + idx + ' ' + elm.hNode.href);
+                    //logMsg(batchIdx + " " + idx + " " + elm.hNode.href);
                     getFmt(elm.videoId, elm.hNode);
                 });
             }, INI_TAG_LINK_DELAY_MS + batchIdx * SUB_TAG_LINK_DELAY_MS);
@@ -2218,8 +2218,8 @@
     };
 
     Links.prototype.isTagDiv = function (node) {
-        var cls = dom.attr(node, 'class') || '';
-        return cls.match(new RegExp('(^|\\s+)' + RegExp.escape(LINKS_HTML_ID) + '\\s+' + RegExp.escape(CSS_PREFIX + 'quality') + '(\\s+|$)'));
+        var cls = dom.attr(node, "class") || "";
+        return cls.match(new RegExp("(^|\\s+)" + RegExp.escape(LINKS_HTML_ID) + "\\s+" + RegExp.escape(CSS_PREFIX + "quality") + "(\\s+|$)"));
     };
 
     Links.prototype.invalidateTagLinks = function () {
@@ -2228,11 +2228,11 @@
         if (!userConfig.tagLinks)
             return;
 
-        forEach(dom.gT('a'), function (idx, hNode) {
-            hNode.removeAttribute(CSS_PREFIX + 'processed');
+        forEach(dom.gT("a"), function (idx, hNode) {
+            hNode.removeAttribute(CSS_PREFIX + "processed");
         });
 
-        var nodes = dom.gT('div');
+        var nodes = dom.gT("div");
 
         for (var i = 0; i < nodes.length;) {
             var hNode = nodes[i];
@@ -2267,12 +2267,12 @@
     };
 
     Links.prototype.getInsertPt = function () {
-        if (dom.gE('page'))
-            return 'page';
-        else if (dom.gE('columns')) // 2017 Material Design
-            return 'columns';
+        if (dom.gE("page"))
+            return "page";
+        else if (dom.gE("columns")) // 2017 Material Design
+            return "columns";
         else
-            return 'top';
+            return "top";
     };
 
     // -----------------------------------------------------------------------------
@@ -2310,9 +2310,9 @@
 
         var now = timeNowInSec();
 
-        //logMsg('lastChkReqTs ' + this.lastChkReqTs + ', diff ' + (now - this.lastChkReqTs));
-        //logMsg('lastChkTs ' + this.lastChkTs);
-        //logMsg('lastChkVer ' + this.lastChkVer);
+        //logMsg("lastChkReqTs " + this.lastChkReqTs + ", diff " + (now - this.lastChkReqTs));
+        //logMsg("lastChkTs " + this.lastChkTs);
+        //logMsg("lastChkVer " + this.lastChkVer);
 
         if (this.lastChkReqTs == null || now < this.lastChkReqTs) {
             this.lastChkReqTs = now;
@@ -2324,15 +2324,15 @@
             return;
 
         if (this.lastChkReqTs - this.lastChkTs > FAIL_TO_CHK_UPDATE_INTERVAL)
-            logMsg('Failed to check ver for ' + ((this.lastChkReqTs - this.lastChkTs) / 86400) + ' days');
+            logMsg("Failed to check ver for " + ((this.lastChkReqTs - this.lastChkTs) / 86400) + " days");
 
         this.lastChkReqTs = now;
         this.storeSettings();
 
         unsafeWin[JSONP_ID] = this;
 
-        var script = dom.cE('script');
-        script.type = 'text/javascript';
+        var script = dom.cE("script");
+        script.type = "text/javascript";
         script.src = SCRIPT_UPDATE_LINK;
         dom.append(doc.body, script);
     };
@@ -2355,11 +2355,11 @@
 
     Links.prototype.showNewVer = function (latestElm) {
         function getVerStr(ver) {
-            var verStr = '' + ver;
+            var verStr = "" + ver;
 
-            var majorV = verStr.substr(0, verStr.length - 4) || '0';
+            var majorV = verStr.substr(0, verStr.length - 4) || "0";
             var minorV = verStr.substr(verStr.length - 4, 2);
-            return majorV + '.' + minorV;
+            return majorV + "." + minorV;
         }
 
         // Entry point
@@ -2373,10 +2373,10 @@
         aNode.href = SCRIPT_LINK;
 
         if (latestElm.desc != null)
-            dom.attr(aNode, 'title', latestElm.desc);
+            dom.attr(aNode, "title", latestElm.desc);
 
-        dom.html(aNode, dom.emitHtml('b', SCRIPT_NAME + ' ' + getVerStr(relInfo.ver)) +
-            '<br>Click to update to ' + getVerStr(latestElm.ver));
+        dom.html(aNode, dom.emitHtml("b", SCRIPT_NAME + " " + getVerStr(relInfo.ver)) +
+            "<br>Click to update to " + getVerStr(latestElm.ver));
     };
 
     // -----------------------------------------------------------------------------
@@ -2395,7 +2395,7 @@
             decryptSig.load();
 
             if (!userConfig.useDecUnits) {
-                fmtSizeSuffix = ['KiB', 'MiB', 'GiB'];
+                fmtSizeSuffix = ["KiB", "MiB", "GiB"];
                 fmtSizeUnit = 1024;
             }
 
@@ -2413,24 +2413,24 @@
 
         // Entry point
         // 'content' is for Material Design
-        if (dom.gE('page') || dom.gE('content') || dom.gE('top')) {
+        if (dom.gE("page") || dom.gE("content") || dom.gE("top")) {
             start();
             return;
         }
 
-        if (!dom.gE('top'))
+        if (!dom.gE("top"))
             setTimeout(waitForReady, WAIT_FOR_READY_POLL_MS);
     }
 
     var scrollTop = win.pageYOffset || doc.documentElement.scrollTop;
 
-    dom.addEvent(win, 'scroll', function (e) {
+    dom.addEvent(win, "scroll", function (e) {
         var newScrollTop = win.pageYOffset || doc.documentElement.scrollTop;
 
         if (Math.abs(newScrollTop - scrollTop) < 100)
             return;
 
-        //logMsg('scroll by ' + (newScrollTop - scrollTop));
+        //logMsg("scroll by " + (newScrollTop - scrollTop));
 
         scrollTop = newScrollTop;
 
@@ -2450,7 +2450,7 @@
         curMousePos.y = e.pageY;
     }
 
-    dom.addEvent(window, 'mousemove', trackMousePos);
+    dom.addEvent(window, "mousemove", trackMousePos);
 
     function chkMouseInPopup() {
         chkMouseInPopupTimer = null;
@@ -2462,12 +2462,12 @@
         var pos = dom.offset(toolTipNode);
         var rect = toolTipNode.getBoundingClientRect();
 
-        //logMsg('mouse x ' + curMousePos.x + ', y ' + curMousePos.y);
-        //logMsg('x ' + Math.round(pos.left) + ', y ' + Math.round(pos.top) + ', wd ' + Math.round(rect.width) + ', ht ' + Math.round(rect.height));
+        //logMsg("mouse x " + curMousePos.x + ", y " + curMousePos.y);
+        //logMsg("x " + Math.round(pos.left) + ", y " + Math.round(pos.top) + ", wd " + Math.round(rect.width) + ", ht " + Math.round(rect.height));
 
         if (curMousePos.x < pos.left || curMousePos.x >= pos.left + rect.width ||
             curMousePos.y < pos.top || curMousePos.y >= pos.top + rect.height) {
-            dom.attr(toolTipNode, 'style', 'display: none;');
+            dom.attr(toolTipNode, "style", "display: none;");
             return;
         }
 
@@ -2503,7 +2503,7 @@
             var newVideoUrl = loc.toString();
 
             if (curVideoUrl != newVideoUrl && inst) {
-                //logMsg(curVideoUrl + ' -> ' + newVideoUrl);
+                //logMsg(curVideoUrl + " -> " + newVideoUrl);
 
                 curVideoUrl = newVideoUrl;
 
